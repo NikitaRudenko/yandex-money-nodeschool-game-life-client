@@ -55,7 +55,6 @@
 	}
 </script>
 
-<style src="vue-material/dist/vue-material.css"></style>
 <style>
 	#canvas {
 		padding: 20px;
