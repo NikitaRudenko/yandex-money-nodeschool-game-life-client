@@ -16,6 +16,7 @@ class Network {
         this.onError = this.onError.bind(this);
         this.initialize = this.initialize.bind(this);
         this.update = this.update.bind(this);
+        this.send = this.send.bind(this);
         this.init = this.init.bind(this);
 
         this.init();
@@ -102,6 +103,7 @@ class Network {
         this.game = new LifeGame(user, settings);
         this.game.init();
         this.game.setState(state);
+        this.game.send = this.send;
     }
 
     /**
@@ -109,8 +111,23 @@ class Network {
      * @param {Object} data
      */
     update(data) {
-        console.log('update');
-        console.log('data:', data);
+        if (!this.game) {return false;}
+
+        const state = data.data;
+
+        this.game.setState(state);
+    }
+
+    /**
+     * Send state to server
+     */
+    send(data) {
+        const message = {
+            type: 'ADD_POINT',
+            data: data
+        };
+
+        this.socket.send(JSON.stringify(message));
     }
 
     /**
