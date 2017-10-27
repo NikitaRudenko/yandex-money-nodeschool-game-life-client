@@ -14,6 +14,8 @@ class Network {
         this.onClose = this.onClose.bind(this);
         this.onMessage = this.onMessage.bind(this);
         this.onError = this.onError.bind(this);
+        this.initialize = this.initialize.bind(this);
+        this.update = this.update.bind(this);
         this.init = this.init.bind(this);
 
         this.init();
@@ -62,7 +64,21 @@ class Network {
      * @param {Object} event
      */
     onMessage(event) {
-        console.log('event:', event);
+        const data = JSON.parse(event.data);
+        const type = data.type;
+
+        switch(type) {
+            case 'INITIALIZE':
+                this.initialize(data);
+                break;
+
+            case 'UPDATE_STATE':
+                this.update(data);
+                break;
+
+            default:
+                this.update(data);
+        }
     }
 
     /**
@@ -71,6 +87,30 @@ class Network {
      */
     onError(error) {
         console.log('Error:', error.message);
+    }
+
+    /**
+     * Initialize game
+     * @param {Object} data
+     */
+    initialize(data) {
+        const gameData = data.data;
+        const user = gameData.user;
+        const settings = gameData.settings;
+        const state = gameData.state;
+
+        this.game = new LifeGame(user, settings);
+        this.game.init();
+        this.game.setState(state);
+    }
+
+    /**
+     * Update game state
+     * @param {Object} data
+     */
+    update(data) {
+        console.log('update');
+        console.log('data:', data);
     }
 
     /**
