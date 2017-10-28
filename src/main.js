@@ -27,6 +27,9 @@ window.App = {
 	},
 	onToken(token) {
 		throw new Error('Вы должны имплементировать метод onToken');
+	},
+	alertReload(alert) {
+		app.$refs.app.showAlertReload(alert);
 	}
 };
 
