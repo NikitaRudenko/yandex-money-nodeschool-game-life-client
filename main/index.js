@@ -1,3 +1,7 @@
+const settings = {
+    endPoint: 'ws://ws.rudenko.tech/life/api?token={token}'
+};
+
 /**
  * Creates a new Network class
  * @class
@@ -26,7 +30,7 @@ class Network {
      * Connect to server and send token
      */
     connect() {
-        this.socket = new WebSocket(`ws://ws.rudenko.tech/life/api?token=${this.token}`);
+        this.socket = new WebSocket(settings.endPoint.replace('{token}', this.token));
     }
 
     /**
