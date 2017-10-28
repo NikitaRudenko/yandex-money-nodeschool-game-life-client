@@ -1,12 +1,13 @@
 const settings = {
-    endPoint: 'ws://ws.rudenko.tech/life/api?token={token}'
+    // endPoint: 'ws://ws.rudenko.tech/life/api?token={token}'
+    endPoint: 'ws://localhost:4000?token={token}'
 };
 
 /**
- * Creates a new Network class
+ * Creates a new Client class
  * @class
  */
-class Network {
+class Client {
     /**
      * Constructor
      */
@@ -143,4 +144,4 @@ class Network {
     }
 }
 
-App.onToken = (token) => (new Network(token));
+App.onToken = (token) => (new Client(token));
