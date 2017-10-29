@@ -42,7 +42,10 @@ App.onToken = token => {
 	};
 
 	socket.onclose = _ => {
-		console.warn('connection was closed');
+		App.alertReload({
+			title: 'Game over',
+			text: 'Connection was closed. <br> The page will be reloaded.'
+		});
 	};
 };
 
