@@ -4,13 +4,18 @@ App.onToken = token => {
 	if (!token) return;
 
 	let game = null;
-	const socket = new WebSocket('ws://localhost:3000?token=' + token);
 
-	socket.onopen = msg => {
+	const socket = new io('ws://localhost:3000', {
+		path: '/',
+		transports: ['websocket'],
+		query: {token}
+	});
+
+	socket.on('connect', msg => {
 		console.info('connection created');
-	};
+	});
 
-	socket.onmessage = msg => {
+	socket.on('message', msg => {
 		const {type, data} = parse(msg);
 
 		if (type === 'UPDATE_STATE') {
@@ -32,24 +37,24 @@ App.onToken = token => {
 		}
 
 		console.warn('unexpected message type: ', type, data);
-	};
+	});
 
-	socket.onerror = e => {
+	socket.on('error', e => {
 		App.alertReload({
 			title: 'Error :(',
 			text: 'Connection error. <br> The page will be reloaded.'
 		});
-	};
+	});
 
-	socket.onclose = _ => {
+	socket.on('close', _ => {
 		App.alertReload({
 			title: 'Game over',
 			text: 'Connection was closed. <br> The page will be reloaded.'
 		});
-	};
+	});
 };
 
-function parse ({data}) {
+function parse (data) {
 	return JSON.parse(data);
 }
 
