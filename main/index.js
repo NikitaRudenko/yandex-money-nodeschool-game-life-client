@@ -4,7 +4,7 @@ App.onToken = token => {
 	if (!token) return;
 
 	let game = null;
-	const socket = new WebSocket('wss://ws.rudenko.tech/life/api?token=' + token);
+	const socket = new WebSocket('ws://localhost:3000?token=' + token);
 
 	socket.onopen = msg => {
 		console.info('connection created');
@@ -42,7 +42,10 @@ App.onToken = token => {
 	};
 
 	socket.onclose = _ => {
-		console.warn('connection was closed');
+		App.alertReload({
+			title: 'Game over',
+			text: 'Connection was closed. <br> The page will be reloaded.'
+		});
 	};
 };
 
