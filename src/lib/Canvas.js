@@ -73,6 +73,9 @@ export default class Canvas {
 
 	_mouseUp(event) {
 		this._isDraw = false;
+
+		let [x, y] = this._getClickCoordsFromEvent(event);		
+		this._trigger('_canvas', 'life__mouse_click', {x, y});
 	}
 
 	_throttle(callback, delay) {
