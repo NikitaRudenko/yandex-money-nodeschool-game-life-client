@@ -51,6 +51,10 @@ module.exports = {
 				options: {
 					extractCSS: true
 				}
+			},
+			{
+				test: /\.css$/,
+				loader: ExtractTextPlugin.extract('css-loader')
 			}
 		]
 	},

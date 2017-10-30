@@ -1,7 +1,7 @@
 <template>
 	<div id="root">
 		<md-toolbar class="md-whiteframe md-whiteframe-1dp">
-			<h2 class="md-title" style="flex: 1">WebSocket</h2>
+			<h2 class="md-title" style="flex: 1">WebSockets GameOfLife</h2>
 			<md-button
 				@click="openDialog('Join')"
 				v-if="!userName"
@@ -11,6 +11,24 @@
 		</md-toolbar>
 
 		<div id="canvas"></div>
+		<div id="score" v-if='players.length > 0'>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Player</th>
+						<th>Population</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr :style='{ color: player.color }' v-for='player in players'>
+						<td><md-icon>face</md-icon></td>
+						<td>{{ player.token }}</td>
+						<td>{{ player.population }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 		<md-dialog-prompt
 				:md-title="prompt.title"
@@ -29,6 +47,7 @@
 	export default {
 		data: () => ({
 			userName: '',
+			players: [],
 			prompt: {
 				title: 'What\'s your name?',
 				ok: 'Done',
@@ -55,13 +74,11 @@
 	}
 </script>
 
-<style src="vue-material/dist/vue-material.css"></style>
 <style>
-	#canvas {
+	#canvas, #score {
+		display: inline-block;
 		padding: 20px;
-		display: flex;
-		justify-content: center;
-		box-sizing: border-box;
+		vertical-align: top;
 	}
 
 	#canvas > canvas {
