@@ -28,6 +28,9 @@ window.App = {
 	},
 	onToken(token) {
 		throw new Error('Вы должны имплементировать метод onToken');
+	},
+	get vue() {
+		return app;
 	}
 };
 

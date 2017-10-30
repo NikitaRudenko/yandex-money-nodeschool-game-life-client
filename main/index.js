@@ -27,12 +27,12 @@
 let Game;
 
 /**
- * Main handler function
- * @param  {string} token
+ * @override Обработчик подтверждения токена
+ * @param  {String} token
  * @return {void}
  */
-const onTokenHandler = token => {
-  const ws = new WebSocket(`ws://ws.rudenko.tech/life/api?token=${token}`);
+App.onToken = token => {
+  const ws = new WebSocket(`ws://localhost:8080?token=${token}`);
 
   ws.onopen = () => {
     console.info('Connection created');
@@ -48,15 +48,15 @@ const onTokenHandler = token => {
     switch(message.type){
       case 'INITIALIZE':
         Game = new LifeGame(message.data.user, message.data.settings);
-        Game.init();
         Game.send = data => {
           const newState = JSON.stringify({ type: 'ADD_POINT', data });
-          console.log('Send state', data.affectedPoints);
           ws.send(newState);
         };
+        Game.init();
         break;
       case 'UPDATE_STATE':
-        Game.setState(message.data);
+        Game.setState(message.data.fields);
+        App.vue.$refs.app.players = message.data.players;
         break;
     }
 
@@ -68,8 +68,3 @@ const onTokenHandler = token => {
   }
 
 }
-
-/**
- * Override handler method
- */
-App.onToken = onTokenHandler;
