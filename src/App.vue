@@ -22,6 +22,13 @@
 				v-model="prompt.value"
 				ref="Join">
 		</md-dialog-prompt>
+
+		<md-dialog-alert
+				:md-title="alert.title"
+				:md-content-html="alert.text"
+				@close="reload"
+				ref="Alert">
+		</md-dialog-alert>
 	</div>
 </template>
 
@@ -38,6 +45,10 @@
 				placeholder: 'Type your name...',
 				maxlength: 30,
 				value: ''
+			},
+			alert: {
+				title: 'title',
+				text: 'text'
 			}
 		}),
 		methods: {
@@ -50,6 +61,13 @@
 			onClose() {
 				this.userName = this.prompt.value;
 				this.$emit('set_user_name', this.userName);
+			},
+			reload() {
+				window.location.reload();
+			},
+			showAlertReload (alert) {
+				this.alert = alert;
+				this.$refs['Alert'].open();
 			}
 		}
 	}
