@@ -2,6 +2,7 @@ export default class Canvas {
 
 	constructor(appendTo, pointSize, dimensions) {
 		this._pointSize = pointSize;
+		this._isDraw = false;
 
 		this._canvas = document.createElement('canvas');
 		this._canvas.setAttribute('width', dimensions.width);
@@ -10,7 +11,13 @@ export default class Canvas {
 		this._context = this._canvas.getContext('2d');
 
 		const clickFn = this._mouseClick.bind(this);
+		const moveFn = this._mouseMove.bind(this);
+		const mouseUpFn = this._mouseUp.bind(this);
+
 		this._canvas.addEventListener('mousedown', clickFn);
+		this._canvas.addEventListener('mousemove', this._throttle(moveFn, 100), false);
+		this._canvas.addEventListener('mouseup', mouseUpFn);
+
 		this._appendTo(appendTo);
 	}
 
@@ -51,10 +58,34 @@ export default class Canvas {
 	}
 
 	_mouseClick(event) {
+		this._isDraw = true;
 		let [x, y] = this._getClickCoordsFromEvent(event);
 
 		this._trigger('_canvas', 'life__mouse_click', {x, y});
 	}
+
+	_mouseMove(event) {
+		if (!this._isDraw) { return; }
+		let [x, y] = this._getClickCoordsFromEvent(event);
+
+		this._trigger('_canvas', 'life__mouse_click', {x, y});
+	}
+
+	_mouseUp(event) {
+		this._isDraw = false;
+	}
+
+	_throttle(callback, delay) {
+		var previousCall = new Date().getTime();
+		return function() {
+		  var time = new Date().getTime();
+	
+		  if ((time - previousCall) >= delay) {
+			previousCall = time;
+			callback.apply(null, arguments);
+		  }
+		};
+	  }
 
 	_trigger(ctx, eventName, data) {
 		const event = new CustomEvent(eventName, {
